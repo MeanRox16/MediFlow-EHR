@@ -10,7 +10,6 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = 'doctor_secret_key'
 
-# Data Tier Configuration
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -21,20 +20,17 @@ def get_db_connection():
     )
 
 def generate_patient_id():
-    """Information Quality: Automated UIDs to prevent data collision"""
     year = datetime.now().year
     random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
     return f"PAT-{year}-{random_code}"
 
 def is_strong_password(password):
-    """Requirement 2: Strong password suggestion/check"""
     if len(password) < 8: return False
     if not re.search(r"[A-Z]", password): return False
     if not re.search(r"[0-9]", password): return False
     if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password): return False
     return True
 
-# --- PUBLIC ROUTES (Requirement 1) ---
 @app.route('/')
 def index(): 
     return render_template('index.html')
@@ -45,7 +41,6 @@ def about():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Requirement 2: Registration with simulated email confirmation"""
     if request.method == 'POST':
         u, p, e = request.form.get('username'), request.form.get('password'), request.form.get('email')
         if not is_strong_password(p):
@@ -54,7 +49,6 @@ def register():
         try:
             cursor.execute("INSERT INTO doctors (username, password, email) VALUES (%s, %s, %s)", (u, p, e))
             db.commit(); cursor.close()
-            # Simulation: In a real system, you'd send an email here.
             flash("Registration Successful! Please check your email for confirmation.")
             return redirect(url_for('login'))
         except mysql.connector.Error as err: return f"Error: {err}"
@@ -63,7 +57,6 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Requirement 2: Login with username/password check"""
     if request.method == 'POST':
         u, p = request.form.get('username'), request.form.get('password')
         db = get_db_connection(); cursor = db.cursor(dictionary=True)
@@ -78,19 +71,15 @@ def login():
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
-    """Requirement 2: Forget password with email"""
     if request.method == 'POST':
         email = request.form.get('email')
-        # Logic: Verify email exists, then simulate sending reset link.
         return render_template('forgot_password.html', success=True)
     return render_template('forgot_password.html')
 
-# --- SECURE CLINICAL ROUTES (Requirement 3: CRUD) ---
 @app.route('/dashboard')
 def dashboard():
     if 'doctor_id' not in session: return redirect(url_for('login'))
     db = get_db_connection(); cursor = db.cursor(dictionary=True)
-    # Filter: Each doctor only views their own list
     cursor.execute("SELECT * FROM patients WHERE doctor_id = %s", (session['doctor_id'],))
     patients = cursor.fetchall()
     cursor.close(); db.close()
@@ -98,7 +87,6 @@ def dashboard():
 
 @app.route('/add_patient', methods=['POST'])
 def add_patient():
-    """Requirement 3.2: Create Patient with multi-data inputs"""
     if 'doctor_id' not in session: return redirect(url_for('login'))
     db = get_db_connection(); cursor = db.cursor()
     new_uid = generate_patient_id() 
@@ -108,7 +96,7 @@ def add_patient():
                          request.form.get('blood_type'), request.form.get('gender'), request.form.get('dob'), 
                          1 if request.form.get('immunization') else 0, request.form.get('notes')))
     pid = cursor.lastrowid
-    # Multi-photo upload function
+    
     images = request.files.getlist('radiology_scan')
     for img in images:
         if img and img.filename != '':
@@ -121,11 +109,9 @@ def add_patient():
 
 @app.route('/view_patient/<int:id>', methods=['GET', 'POST'])
 def view_patient(id):
-    """Requirement 3.1: Read and Update Patient EHR"""
     if 'doctor_id' not in session: return redirect(url_for('login'))
     db = get_db_connection(); cursor = db.cursor(dictionary=True)
     if request.method == 'POST':
-        # Update function
         sql = """UPDATE patients SET full_name=%s, weight=%s, blood_type=%s, gender=%s, dob=%s, is_smoker=%s, notes=%s 
                  WHERE id=%s AND doctor_id=%s"""
         cursor.execute(sql, (request.form.get('full_name'), request.form.get('weight'), request.form.get('blood_type'), 
@@ -141,7 +127,6 @@ def view_patient(id):
 
 @app.route('/delete_image/<int:image_id>')
 def delete_image(image_id):
-    """Requirement 3.2: Image Delete Function"""
     if 'doctor_id' not in session: return redirect(url_for('login'))
     db = get_db_connection(); cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM patient_images WHERE id = %s", (image_id,))
@@ -156,7 +141,6 @@ def delete_image(image_id):
 
 @app.route('/delete_patient/<int:id>')
 def delete_patient(id):
-    """Requirement 3.1: Delete Patient EHR"""
     if 'doctor_id' not in session: return redirect(url_for('login'))
     db = get_db_connection(); cursor = db.cursor()
     cursor.execute("DELETE FROM patients WHERE id = %s AND doctor_id = %s", (id, session['doctor_id']))

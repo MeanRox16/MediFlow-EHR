@@ -2,39 +2,18 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-5">
-        <div class="card shadow-lg border-0">
-            <div class="card-body p-5">
-                <h3 class="text-center mb-4 text-primary fw-bold">Doctor Registration</h3>
-                {% if error %}<div class="alert alert-danger text-center">{{ error }}</div>{% endif %}
-                <form action="/register" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                        <div class="form-text mt-2 text-muted">
-                            <strong>Security Requirements:</strong>
-                            <ul class="small mb-0">
-                                <li>Minimum 8 characters</li>
-                                <li>One uppercase letter (A-Z)</li>
-                                <li>One numeric digit (0-9)</li>
-                                <li>One special character (!, @, #, etc.)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 fw-bold">Create Account</button>
-                    <hr>
-                    <div class="text-center">
-                        <p class="mb-0 small text-muted">Already registered? <a href="/login" class="text-decoration-none fw-bold">Login here</a></p>
-                    </div>
-                </form>
-            </div>
+        <div class="card shadow border-0 p-4">
+            <h3 class="text-center text-primary fw-bold mb-4">Doctor Registration</h3>
+            {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+            <form method="POST">
+                <input type="text" name="username" class="form-control mb-3" placeholder="Username" required>
+                <input type="email" name="email" class="form-control mb-3" placeholder="Clinical Email" required>
+                <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+                <div class="form-text text-muted mb-3 small">
+                    Must be 8+ characters, containing at least 1 uppercase letter, 1 number, and 1 special character.
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Create Account</button>
+            </form>
         </div>
     </div>
 </div>
