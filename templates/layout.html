@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediFlow EHR | Digital Health</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .hero-gradient { background: linear-gradient(135deg, #0d6efd 0%, #00255c 100%); color: white; }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-activity"></i> MediFlow EHR</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto nav-pills">
+                    <li class="nav-item"><a class="nav-link text-white {{ 'active bg-primary' if request.path == '/' }}" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white {{ 'active bg-primary' if request.path == '/about' }}" href="/about">About</a></li>
+                    {% if session.get('doctor_id') %}
+                        <li class="nav-item"><a class="nav-link text-white {{ 'active bg-primary' if request.path == '/dashboard' }}" href="/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link text-white {{ 'active bg-primary' if request.path == '/login' }}" href="/login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link text-white {{ 'active bg-primary' if request.path == '/register' }}" href="/register">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="mt-0">{% block content %}{% endblock %}</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+</html>

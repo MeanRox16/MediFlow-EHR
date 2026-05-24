@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 p-5">
+        <h2 class="text-primary border-bottom pb-2">EHR Clinical Context</h2>
+        <p class="lead mt-3">
+            This prototype is designed for a <strong>Cardiology and Radiology Specialty Clinic</strong>.
+        </p>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5>Medical Use Case</h5>
+                <p>Doctors use this system to track patient demographics alongside high-resolution diagnostic imaging. The goal is to reduce the "diagnostic gap" by centralizing clinical notes and scans in one secure location.</p>
+            </div>
+            <div class="col-md-6">
+                <h5>Technological Scope</h5>
+                <ul>
+                    <li>Doctor-specific data isolation.</li>
+                    <li>Secure relational database storage.</li>
+                    <li>Integrated Radiology Gallery (Multiple Scans).</li>
+                </ul>
+            </div>
+        </div>
+        <a href="/dashboard" class="btn btn-primary mt-4">Return to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

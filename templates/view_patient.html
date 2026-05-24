@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container pb-5">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+            <h4 class="mb-0">EHR Record: {{ p.full_name }}</h4>
+            <span class="badge bg-light text-primary p-2">UID: {{ p.patient_uid }}</span>
+        </div>
+        
+        <form action="/view_patient/{{ p.id }}" method="POST" enctype="multipart/form-data" class="card-body p-4">
+            <!-- Patient Demographic Form Fields -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6"><label class="fw-bold small text-muted">Full Name</label><input type="text" name="full_name" class="form-control" value="{{ p.full_name }}" required></div>
+                <div class="col-md-3"><label class="fw-bold small text-muted">Weight (kg)</label><input type="number" step="0.1" name="weight" class="form-control" value="{{ p.weight }}"></div>
+                <div class="col-md-3"><label class="fw-bold small text-muted">Blood Type</label><input type="text" name="blood_type" class="form-control" value="{{ p.blood_type }}"></div>
+                <div class="col-md-6"><label class="fw-bold small text-muted d-block">Gender</label><input type="radio" name="gender" value="Male" {{ 'checked' if p.gender == 'Male' }}> Male <input type="radio" name="gender" value="Female" {{ 'checked' if p.gender == 'Female' }}> Female</div>
+                <div class="col-md-3"><label class="fw-bold small text-muted">Birth Date</label><input type="date" name="dob" class="form-control" value="{{ p.dob }}"></div>
+                <div class="col-md-3"><label class="fw-bold small text-muted">Checkup Date (JS)</label><input type="text" id="js-date-edit" name="last_visit" class="form-control"></div>
+                <div class="col-12"><div class="form-check"><input type="checkbox" name="immunization" class="form-check-input" {{ 'checked' if p.is_smoker == 1 }}><label>Immunization Records Current</label></div></div>
+                <div class="col-12"><label class="fw-bold small text-muted">Medical History, Meds & Allergies</label><textarea name="notes" class="form-control" rows="4">{{ p.notes }}</textarea></div>
+            </div>
+
+            <!-- SIMULTANEOUS MULTI-PHOTO GALLERY WITH DELETE -->
+            <div class="border-top pt-4">
+                <h5 class="text-primary mb-4 fw-bold"><i class="bi bi-images"></i> Radiology Image Gallery</h5>
+                <div class="row g-3 mb-4">
+                    {% for img in images %}
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm border-0 position-relative">
+                            <!-- Image Removal Overlay -->
+                            <a href="{{ url_for('delete_image', image_id=img.id) }}" 
+                               class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 shadow-sm"
+                               onclick="return confirm('Permanently remove this diagnostic scan?')">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                            <img src="{{ url_for('static', filename='uploads/' + img.image_path) }}" 
+                                 class="card-img-top rounded shadow" 
+                                 style="height: 250px; object-fit: contain; background: #f8f9fa;">
+                            <div class="card-body p-2 text-center text-muted small">Diagnostic ID: {{ img.id }}</div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12 text-center py-4 bg-white rounded border text-muted">No diagnostic images found.</div>
+                    {% endfor %}
+                </div>
+                <label class="fw-bold text-muted small mb-2">Upload More Diagnostic Scans</label>
+                <input type="file" name="radiology_scan" class="form-control" multiple accept="image/*">
+            </div>
+
+            <div class="mt-5 border-top pt-4 text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">Save All Clinical Updates</button>
+                <a href="/dashboard" class="btn btn-outline-secondary btn-lg ms-2">Back to Portal</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>flatpickr("#js-date-edit", { dateFormat: "Y-m-d" });</script>
+{% endblock %}

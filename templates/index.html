@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="hero-gradient py-5 text-center shadow">
+    <div class="container py-5">
+        <h1 class="display-3 fw-bold mb-3">The Digital EHR Ecosystem</h1>
+        <p class="lead mb-5 px-md-5">A high-fidelity Electronic Health Record system achieving value-based care and Excellent SUS validation scores.</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a href="/login" class="btn btn-light btn-lg px-5 fw-bold text-primary shadow">Physician Access</a>
+            <a href="/register" class="btn btn-outline-light btn-lg px-5">Create Physician Account</a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <i class="bi bi-activity text-primary display-4 mb-3"></i>
+                <h4 class="fw-bold">Clinical Agility</h4>
+                <p class="text-muted small">Integrated cardiology and radiology data tiers for real-time diagnostic support.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <i class="bi bi-shield-check text-primary display-4 mb-3"></i>
+                <h4 class="fw-bold">Secure Infrastructure</h4>
+                <p class="text-muted small">System Integrity enforced via password entropy and encrypted routing.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <i class="bi bi-star-fill text-primary display-4 mb-3"></i>
+                <h4 class="fw-bold">Validated Success</h4>
+                <p class="text-muted small">Independently verified with a <strong>Mean SUS score of 81.5</strong>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
