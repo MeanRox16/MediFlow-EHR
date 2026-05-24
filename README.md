@@ -10,8 +10,8 @@
 ## Setup Instructions
 
 1. Open phpMyAdmin or your MySQL client.
-2. Create a new database named `ehr\_system`.
-3. Import the provided `ehr\_system.sql` file into this database to create all necessary tables.
+2. Create a new database named `ehr_system`.
+3. Import the provided `ehr_system.sql` file into this database to create all necessary tables.
 4. Open your terminal in the project folder and install the required Python libraries:
 
 &#x20;  pip install flask mysql-connector-python
